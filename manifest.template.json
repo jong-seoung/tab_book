@@ -1,0 +1,46 @@
+{
+  "manifest_version": 3,
+  "name": "Tab Book",
+  "version": "1.1.8",
+  "description": "작업 중인 탭들을 단축키 하나로 저장하고 쉽게 불러올 수 있는 가벼운 탭 관리 확장 프로그램",
+  "permissions": [ "identity", "notifications", "tabs", "storage", "activeTab" ],
+  "oauth2": {
+    "client_id": "__CLIENT_ID__",
+    "scopes":["https://www.googleapis.com/auth/userinfo.email"]
+  },
+  "key": "__EXTENSION_KEY__",
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "카테고리 선택"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "commands": {
+    "open-popup": {
+      "suggested_key": {
+          "default": "Alt+N"
+      },
+      "description": "프로그램 팝업 열기"
+    },
+    "save-current-tab": {
+      "suggested_key": {
+        "default": "Alt+S"
+      },
+      "description": "현재 탭의 링크 저장"
+    },
+    "save-all-tabs": {
+      "suggested_key": {
+        "default": "Alt+Shift+S"
+      },
+      "description": "모든 탭의 링크 저장"
+    }
+  }
+}

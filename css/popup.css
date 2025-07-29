@@ -1,0 +1,261 @@
+body{
+  font-family: sans-serif;
+  width: 300px;
+  padding: 10px;
+ -ms-overflow-style: none;
+ }
+ 
+::-webkit-scrollbar {
+  display: none;
+}
+
+.category-wrapper {
+  margin-bottom: 3px;
+  margin-left: 10px;
+}
+
+.dummy-category-wrapper {
+  height: 1px;
+  background: transparent;
+}
+
+.category-header {
+  cursor: pointer;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px dashed #e0e0e0;
+  padding: 5px 0;
+}
+
+.trash-header{
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.setting-icon{
+  width: 9px;
+  height: 9px;
+}
+
+.setting-menu{
+  display: none;
+  position: absolute;
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 5px;
+  z-index: 1000;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.setting-item{
+  cursor: pointer;
+  padding: 4px;
+}
+
+.url-item p {
+  display: inline-block;
+  max-width: 70%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: 0px;
+}
+
+.deleteBtn {
+  margin-right: 7px;
+  background-color: transparent;
+}
+
+.url-list {
+  display: none;
+  padding-left: 10px;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.url-item {
+  font-size: 13px;
+  margin: 5px 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.url-list-empty {
+  margin-top: 6px;
+  font-size: 12px;
+  color: #888;
+}
+
+.url-item a {
+  text-decoration: none;
+  color: gray;
+  font-size: 13px;
+}
+
+.url-item button {
+  cursor: pointer;
+  background-color: white;
+  color: gray;
+  border: none;
+  padding: 2px 5px;
+  font-size: 11px;
+}
+
+.input-group input,
+.input-group button {
+  width: 100%;
+  margin-top: 5px;
+}
+
+#newCategoryInput {
+  display: none;
+  width: 100%;
+  margin-top: 5px;
+}
+
+#addCategoryBtn {
+  display: block;
+  margin: 0 auto;
+  font-size: 15px;
+  background-color: white;
+  color: gray;
+  border: 1px solid white;
+  cursor: pointer;
+}
+
+.active-category {
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.dropdown-arrow {
+  margin-left: 5px;
+}
+
+.category-item {
+  cursor: pointer;
+  padding: 5px 0;
+}
+
+.category-box {
+  padding: 10px;
+  background-color: #f0f0f0;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-bottom: 10px;
+}
+
+.category-box h3 {
+  margin-top: 0;
+}
+
+.category-buttons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.category-buttons button {
+  background: transparent;
+  border: none;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+#categoryList {
+  display: none;
+}
+
+#save-tab,
+#save-tabs {
+  cursor: pointer;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+#save-tab:hover div,
+#save-tabs:hover div {
+  color: black !important;
+}
+
+.shortcut {
+  font-size: 9px;
+  color: gray;
+}
+
+.label {
+  font-size: 11px;
+  color: gray;
+}
+
+.category-header-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.category-title {
+  margin-left: 10px;
+}
+
+.category-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.category-list {
+  padding: 0px;
+  margin-left: 10px;
+}
+
+/* 입력창 컨테이너 */
+#newCategoryInput {
+  display: none;
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* 입력창 스타일 */
+#newCategory {
+  width: calc(100% - 80px); /* 버튼을 제외한 입력창의 넓이 */
+  margin-left: 7px;
+}
+
+#newCategory:focus {
+  outline-color: #5a6a7c; /* 아웃라인 색상 변경 */
+}
+
+/* 추가 버튼 스타일 */
+#confirmAddCategoryBtn {
+  width: 50px;
+  height: 100%;
+  margin-top: 0px;
+  margin-left: 10px; 
+  background-color: #9eaec0;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+#confirmAddCategoryBtn:hover {
+  background-color: #5a6a7c; /* 버튼 호버 효과 */
+}
+
+.a-decoration {
+  color: #fff;
+  text-decoration: none;
+}
+
+.a-decoration:hover {
+  text-decoration: underline;
+}
