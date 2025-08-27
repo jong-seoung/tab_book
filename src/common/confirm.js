@@ -1,17 +1,14 @@
-import { redirectToPayment } from "./Payment.js";
-import { getUsertoken } from "../storage/userStorage.js";
-
 function createModal(contentHTML, onClose) {
   document.querySelector(".custom-modal")?.remove();
-    const modal = document.createElement("div");
-    modal.className = "custom-modal";
-    modal.innerHTML = `
+  const modal = document.createElement("div");
+  modal.className = "custom-modal";
+  modal.innerHTML = `
     <div class="custom-modal-content">
         ${contentHTML}
     </div>
     `;
 
-    if (!document.querySelector("#custom-modal-style")) {
+  if (!document.querySelector("#custom-modal-style")) {
     const style = document.createElement("style");
     style.id = "custom-modal-style";
     style.textContent = `
@@ -97,9 +94,7 @@ function createModal(contentHTML, onClose) {
         }
     `;
     document.head.appendChild(style);
-    }
-
-
+  }
 
   document.body.appendChild(modal);
 
@@ -113,34 +108,31 @@ function createModal(contentHTML, onClose) {
   return modal;
 }
 
-export function showCustomAlert(message, onClose = () => {}) {
-  const modal = createModal(`
+export function showCustomConfirm(message, onConfirm, onCancel = () => {}) {
+  const modal = createModal(
+    `
     <p>${message}</p>
     <div class="custom-modal-buttons">
-      <button id="paymentBtn">결제하러 가기</button>
-      <button id="okBtn">확인</button>
+      <button id="confirmBtn">확인</button>
+      <button id="cancelBtn">취소</button>
     </div>
-  `, () => {
-    onClose();
-  });
+  `,
+    () => {
+      onCancel();
+    }
+  );
 
-  modal.querySelector("#okBtn").addEventListener("click", () => {
-    onClose();
+  modal.querySelector("#confirmBtn").addEventListener("click", () => {
+    onConfirm(true);
     modal.remove();
   });
 
-   modal.querySelector("#paymentBtn").addEventListener("click", () => {
-    getUsertoken()
-      .then(token => {
-        redirectToPayment(token);
-      })
-      .catch(err => {
-        console.error('토큰을 가져오는 데 실패했습니다.', err);
-      });
-
+  modal.querySelector("#cancelBtn").addEventListener("click", () => {
+    onCancel(false);
     modal.remove();
   });
 }
+
 
 
 export function showCustomAlertOnly(message, onClose = () => {}) {
@@ -155,27 +147,6 @@ export function showCustomAlertOnly(message, onClose = () => {}) {
 
   modal.querySelector("#okBtn").addEventListener("click", () => {
     onClose();
-    modal.remove();
-  });
-}
-export function showCustomConfirm(message, onConfirm, onCancel = () => {}) {
-  const modal = createModal(`
-    <p>${message}</p>
-    <div class="custom-modal-buttons">
-      <button id="confirmBtn">확인</button>
-      <button id="cancelBtn">취소</button>
-    </div>
-  `, () => {
-    onCancel();
-  });
-
-  modal.querySelector("#confirmBtn").addEventListener("click", () => {
-    onConfirm(true);
-    modal.remove();
-  });
-
-  modal.querySelector("#cancelBtn").addEventListener("click", () => {
-    onCancel(false);
     modal.remove();
   });
 }
@@ -211,5 +182,4 @@ export function showCustomPrompt(message, defaultValue, onSubmit, onCancel = () 
       modal.remove();
     }
   });
-  
 }

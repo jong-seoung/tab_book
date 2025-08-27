@@ -1,10 +1,11 @@
-import { deleteCategory, updateCategory } from "../storage/categoryStorage.js";
-import { showCustomConfirm, showCustomPrompt } from "../utils/customDialogs.js";
-import { styleButton } from "./common.js";
+import { styleButton } from "../common/common.js";
+import { deleteCategory, updateCategory } from "./categoryCRUD.js"
+import { showCustomConfirm, showCustomPrompt } from "../common/confirm.js";
 
 let openedSettingMenu = null;
 
-export function createSettingButton(categoryName) {
+// setting button 생성
+export function createSettingButton(category) {
   const settingBtn = document.createElement("button");
   settingBtn.className = "setting-button";
   styleButton(settingBtn, "gray");
@@ -12,12 +13,12 @@ export function createSettingButton(categoryName) {
 
   const img = document.createElement("img");
   img.className = "setting-icon";
-  img.src = "p.png";
+  img.src = "src/public/p.png";
   img.alt = "설정";
 
   settingBtn.appendChild(img);
 
-  const menu = createSettingMenu(categoryName);
+  const menu = createSettingMenu(category);
   document.body.appendChild(menu);
 
   settingBtn.addEventListener("click", (e) => {
@@ -40,8 +41,8 @@ export function createSettingButton(categoryName) {
   return settingBtn;
 }
 
-
-function createSettingMenu(categoryName) {
+// setting button 클릭시 활성화 되는 버튼 메뉴
+export function createSettingMenu(category) {
   const menu = document.createElement("div");
   menu.className = "setting-menu";
 
@@ -54,15 +55,18 @@ function createSettingMenu(categoryName) {
     menu.style.display = "none";
 
     showCustomPrompt(
-      `"${categoryName}"의 이름을 변경합니다.`,
+      `"${category}"의 이름을 변경합니다.`,
       "",
-      (newCatName) => { 
-        if (newCatName && newCatName.trim() !== "" && newCatName.trim() !== categoryName) {
-          updateCategory(categoryName, newCatName.trim());
+      (newCatName) => {
+        if (
+          newCatName &&
+          newCatName.trim() !== "" &&
+          newCatName.trim() !== category
+        ) {
+          updateCategory(category, newCatName.trim());
         }
       },
       () => {
-        console.log("변경 취소됨");
       }
     );
   });
@@ -77,22 +81,21 @@ function createSettingMenu(categoryName) {
     menu.style.display = "none";
 
     showCustomPrompt(
-      `"${categoryName}" 카테고리를 삭제하려면 이름을 정확히 입력하세요.`,
+      `"${category}" 카테고리를 삭제하려면 이름을 정확히 입력하세요.`,
       "",
       function handleInput(userInput) {
-        if (userInput === categoryName) {
-          deleteCategory(categoryName);
+        if (userInput === category) {
+          deleteCategory(category);
         } else {
           showCustomConfirm("틀립니다. 다시 입력해주세요.", function () {
-            deleteItem.click(); 
+            deleteItem.click();
           });
         }
       },
       function onCancel() {
-        console.log("삭제 취소됨");
       }
     );
-});
+  });
 
   menu.append(renameItem, deleteItem);
   return menu;

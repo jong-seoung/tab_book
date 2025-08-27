@@ -1,13 +1,5 @@
 // popup.js
-import { loadData } from './utils/loadData.js';
-import { renderHeaderWithTooltip } from "./ui/toolTipRender.js";
-import { syncSubscriptionStatus, checkUserSubscription } from "./storage/userStorage.js"
-
-// refactor
-import { setupActiveCategoryDropdown } from "./utils/activeCategory.js";
-import { setupSaveItems, setupSaveItemsWithShortcut } from './utils/saveItem.js';
-import { setupAddCategory } from "./utils/category.js";
-
+import { loadData } from './loadData.js';
 
 // 초기 데이터 로딩
 document.addEventListener("DOMContentLoaded", async () => {
@@ -15,15 +7,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const content = document.getElementById("main-content");
 
   try {
-    if (!checkUserSubscription()){
-      await syncSubscriptionStatus();
-    }
     loadData();
-    renderHeaderWithTooltip();
-    setupSaveItemsWithShortcut();
-    setupActiveCategoryDropdown();
-    setupSaveItems();
-    setupAddCategory();
   } catch (error) {
     console.error("초기화 중 오류 발생:", error);
   } finally {
