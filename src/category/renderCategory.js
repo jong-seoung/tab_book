@@ -80,6 +80,10 @@ function createCategoryHeader(category) {
 
 // category add button ( + button )
 export function createAddCategoryButton() {
+  if (document.getElementById("confirmAddCategoryBtn")) {
+    return;
+  }
+
   const addCategoryBtn = document.getElementById("addCategoryBtn");
   const newCategoryInput = document.getElementById("newCategoryInput");
   const newCategoryInputField = document.getElementById("newCategory");

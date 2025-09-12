@@ -49,7 +49,6 @@ export async function loadChromeStorage() {
     ["categories", "savedUrls", "activeCategory"],
     (data) => {
       initializeDefaultStorageIfEmpty(data);
-      console.log(data);
     }
   );
 }
@@ -76,7 +75,7 @@ function initializeDefaultStorageIfEmpty(data) {
   }
 
   // 3. activeCategory
-  if (data.activeCategory === "" || data.activeCategory === null) {
+  if (data.activeCategory === "" || data.activeCategory === null || data.activeCategory === undefined) {
     const defaultActiveCategory = "기본";
     setActiveCategory(defaultActiveCategory);
     chrome.storage.sync.set({ activeCategory: defaultActiveCategory });

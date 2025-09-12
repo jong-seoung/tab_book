@@ -26,19 +26,20 @@ export function createDeleteAllButton(category) {
 }
 
 function deleteAllUrls(category) {
-  const savedUrls = getSavedUrls();
+  const savedUrls = JSON.parse(JSON.stringify(getSavedUrls())); // 깊은 복사
   const deletedUrls = savedUrls[category] || [];
   const trashUrls = savedUrls["휴지통"] || [];
 
-  deletedUrls.forEach((element) => {
-    element["beforeCategory"] = category;
-  });
+  // beforeCategory 기록
+  deletedUrls.forEach(el => el["beforeCategory"] = category);
 
-  const updatedTrash = [...trashUrls, ...deletedUrls];
+  // 휴지통에 추가
+  savedUrls["휴지통"] = [...trashUrls, ...deletedUrls];
+  savedUrls[category] = []; // 선택 카테고리 비우기
 
-  setSavedUrls({ ...getSavedUrls(), ["휴지통"]: updatedTrash, [category]: [] });
+  setSavedUrls(savedUrls);
 
-  chrome.storage.sync.set({ savedUrls: getSavedUrls() }, () => {
+  chrome.storage.sync.set({ savedUrls }, () => {
     openUrlListByCategory(category);
   });
 }

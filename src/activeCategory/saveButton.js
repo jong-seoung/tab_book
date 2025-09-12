@@ -8,7 +8,7 @@ export function setUpAddUrlButton() {
   saveTab.addEventListener("click", () => {
     chrome.storage.sync.get(["savedUrls", "activeCategory"], (data) => {
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-        addUrlToActiveCategory(data, tabs, true);
+        addUrlToActiveCategory(data, tabs);
       });
     });
   });
@@ -16,7 +16,7 @@ export function setUpAddUrlButton() {
   saveTabs.addEventListener("click", () => {
     chrome.storage.sync.get(["savedUrls", "activeCategory"], (data) => {
       chrome.tabs.query({}, (tabs) => {
-        addUrlToActiveCategory(data, tabs, true);
+        addUrlToActiveCategory(data, tabs);
       });
     });
   });

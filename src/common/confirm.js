@@ -183,3 +183,34 @@ export function showCustomPrompt(message, defaultValue, onSubmit, onCancel = () 
     }
   });
 }
+
+export function showCustomAlert(message, onClose = () => {}) {
+  const modal = createModal(`
+    <p>${message}</p>
+    <div class="custom-modal-buttons">
+      <button id="paymentBtn">결제하러 가기</button>
+      <button id="okBtn">확인</button>
+    </div>
+  `, () => {
+    onClose();
+  });
+
+  modal.querySelector("#okBtn").addEventListener("click", () => {
+    onClose();
+    modal.remove();
+  });
+
+   modal.querySelector("#paymentBtn").addEventListener("click", () => {
+    getUsertoken()
+      .then(token => {
+        console.log('(결제 페이지 이동):');
+        // 결제 페이지 이동
+        // redirectToPayment(token);
+      })
+      .catch(err => {
+        console.error('토큰을 가져오는 데 실패했습니다.', err);
+      });
+
+    modal.remove();
+  });
+}

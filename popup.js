@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.type === "CATEGORY_UPDATED") {
       try {
-        loadData(true);
+        loadData();
       } catch (error) {
         console.error("Error updating DOM:", error);
       }

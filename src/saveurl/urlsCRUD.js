@@ -1,33 +1,60 @@
-import { getSavedUrls, setSavedUrls } from "../useState.js";
+import {
+  getActiveCategory,
+  getSavedUrls,
+  getUserActive,
+  setSavedUrls,
+} from "../useState.js";
 import { openUrlListByCategory } from "../common/afterEvent.js";
+import { notifyUrlLimitReached } from "../user/ProUserNoti.js";
+
 // add urls
-export function addUrlToActiveCategory(data, tabs, isNotification = true) {
-  const activeCategory = data.activeCategory;
+export function addUrlToActiveCategory(data, tabs, isBackground = false) {
+  if (!getUserActive() && notifyUrlLimitReached(data, tabs)) {
+    return;
+  }
 
-  const allSavedUrls = data.savedUrls;
-  const categoryUrls = allSavedUrls[activeCategory] || [];
+  let activeCategory;
+  let SavedUrls;
 
-  tabs.forEach((element) => {
-    categoryUrls.push({
-      title: element.title,
-      url: element.url,
-    });
+  if (isBackground) {
+    activeCategory = data.activeCategory;
+    SavedUrls = data.savedUrls;
+  } else {
+    activeCategory = getActiveCategory();
+    SavedUrls = getSavedUrls();
+  }
+
+  const categoryUrls = SavedUrls[activeCategory];
+
+  tabs.forEach((tab) => {
+    const exists = categoryUrls.some(
+      (item) => item.url === tab.url && item.title === tab.title
+    );
+    if (!exists) {
+      categoryUrls.push({
+        title: tab.title,
+        url: tab.url,
+      });
+    }
   });
 
-  allSavedUrls[activeCategory] = categoryUrls;
+  SavedUrls[activeCategory] = categoryUrls;
 
-  setSavedUrls(allSavedUrls);
-  chrome.storage.sync.set({ savedUrls: allSavedUrls }, () => {
-    openUrlListByCategory(activeCategory);
+  setSavedUrls(SavedUrls);
+
+  chrome.storage.sync.set({ savedUrls: SavedUrls }, () => {
+    if (isBackground) {
+      chrome.runtime.sendMessage({ type: "CATEGORY_UPDATED" }, () => {
+        if (chrome.runtime.lastError) return;
+      });
+    } else {
+      openUrlListByCategory(activeCategory);
+    }
   });
 }
 
 // rename urls
 export function updateUrlTitle(category, element, newTitle) {
-  console.log(category);
-  console.log(element);
-  console.log(newTitle);
-
   const savedUrls = getSavedUrls();
   const categorySavedUrls = savedUrls[category];
 
@@ -59,8 +86,16 @@ export function deleteUrlToButtonX(category, element) {
     // 휴지통이 아니면 휴지통으로 이동
     const deleteUrls = savedUrls[category].filter((url) => url !== element);
 
-    element["beforeCategory"] = category;
-    const updatedTrash = [...trashUrls, element];
+    const trashItem = { ...element, beforeCategory: category };
+    
+    const exists = trashUrls.some(
+      (item) =>
+        item.url === trashItem.url &&
+        item.title === trashItem.title &&
+        item.beforeCategory === trashItem.beforeCategory
+    );
+
+    const updatedTrash = exists ? trashUrls : [...trashUrls, trashItem];
 
     newSavedUrls = {
       ...savedUrls,
@@ -87,7 +122,11 @@ export function restoreUrlToButton(element) {
   const beforeUrls = savedUrls[beforeCategory] || [];
   delete element.beforeCategory;
 
-  const restoreSaveUrls = [...beforeUrls, element];
+  const exists = beforeUrls.some(
+    (item) => item.url === element.url && item.title === element.title
+  );
+
+  const restoreSaveUrls = exists ? beforeUrls : [...beforeUrls, element];
 
   const newSavedUrls = {
     ...savedUrls,

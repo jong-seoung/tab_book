@@ -20,4 +20,4 @@ export const [getSavedUrls, setSavedUrls, subscribeSavedUrls] = useState({});
 export const [getActiveCategory, setActiveCategory, subscribeActiveCategory] =
   useState("기본");
 export const [getUserActive, setUserActive, subscribeUserActive] =
-  useState(false);
+  useState(true); // true: pro, false: free

@@ -5,7 +5,10 @@ import {
   setSavedUrls,
   setActiveCategory,
   getActiveCategory,
+  getUserActive,
 } from "../useState.js";
+
+import { notifyCategoryLimitReached } from "../user/ProUserNoti.js";
 
 // category active
 export function changeActiveCategory(category) {
@@ -17,6 +20,10 @@ export function changeActiveCategory(category) {
 // category create
 export function addCategory(newCategory) {
   if (newCategory == "") {
+    return;
+  }
+
+  if (!getUserActive() && notifyCategoryLimitReached()) {
     return;
   }
 

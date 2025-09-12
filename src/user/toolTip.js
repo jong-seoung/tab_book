@@ -5,6 +5,10 @@ import { loadUserData } from "./loadUserData.js";
 export function renderTooltip() {
   const toolTipDiv = document.getElementById("tool-tips");
 
+  if (toolTipDiv.querySelector("p")) {
+    return;
+  }
+
   const infoIcon = document.createElement("p");
   infoIcon.textContent = "ⓘ";
   infoIcon.style.color = "gray";
