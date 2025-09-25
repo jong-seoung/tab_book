@@ -160,6 +160,7 @@ function enableInlineEdit(div, link, deleteBtn, categoryName, item) {
 }
 
 function toggleEditState(div, link, deleteBtn, isEditing) {
+  div.draggable = isEditing ? false : true;
   link.style.display = isEditing ? "none" : "inline-block";
   deleteBtn.style.display = isEditing ? "none" : "inline-block";
   div.dataset.isEditing = isEditing ? "true" : "false";

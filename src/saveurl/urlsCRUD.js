@@ -65,7 +65,9 @@ export function updateUrlTitle(category, element, newTitle) {
     [category]: categorySavedUrls,
   };
   setSavedUrls(newSavedUrls);
-  chrome.storage.sync.set({ savedUrls: newSavedUrls });
+  chrome.storage.sync.set({ savedUrls: newSavedUrls }, () => {
+    openUrlListByCategory(category);
+  });
 }
 
 // delete urls
