@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "../.env.js";
+import { API_BASE_URL } from "../env.js";
 
 export function redirectToPayment(token) {
   // POST 방식으로 토큰을 서버에 전달

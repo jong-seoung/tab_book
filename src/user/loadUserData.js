@@ -1,5 +1,5 @@
 import { setUserActive } from "../useState.js";
-import { API_BASE_URL } from "../.env.js";
+import { API_BASE_URL } from "../env.js";
 
 export function loadUserData() {
   chrome.storage.sync.get(["userInfo"], (data) => {
