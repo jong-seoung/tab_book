@@ -28,6 +28,7 @@ export async function loadData() {
 
   subscribeCategory(renderCategories);
   subscribeCategory(createTrashCategory);
+  subscribeCategory(renderActiveCategory);
 
   subscribeSavedUrls(renderCategories);
   subscribeSavedUrls(createTrashCategory);
@@ -75,7 +76,11 @@ function initializeDefaultStorageIfEmpty(data) {
   }
 
   // 3. activeCategory
-  if (data.activeCategory === "" || data.activeCategory === null || data.activeCategory === undefined) {
+  if (
+    data.activeCategory === "" ||
+    data.activeCategory === null ||
+    data.activeCategory === undefined
+  ) {
     const defaultActiveCategory = "기본";
     setActiveCategory(defaultActiveCategory);
     chrome.storage.sync.set({ activeCategory: defaultActiveCategory });
