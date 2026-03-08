@@ -1,3 +1,5 @@
+import { t } from "../i18n/i18n.js";
+
 function createModal(contentHTML, onClose) {
   document.querySelector(".custom-modal")?.remove();
   const modal = document.createElement("div");
@@ -113,8 +115,8 @@ export function showCustomConfirm(message, onConfirm, onCancel = () => {}) {
     `
     <p>${message}</p>
     <div class="custom-modal-buttons">
-      <button id="confirmBtn">확인</button>
-      <button id="cancelBtn">취소</button>
+      <button id="confirmBtn">${t("confirm")}</button>
+      <button id="cancelBtn">${t("cancel")}</button>
     </div>
   `,
     () => {
@@ -133,13 +135,11 @@ export function showCustomConfirm(message, onConfirm, onCancel = () => {}) {
   });
 }
 
-
-
 export function showCustomAlertOnly(message, onClose = () => {}) {
   const modal = createModal(`
     <p>${message}</p>
     <div class="custom-modal-buttons">
-      <button id="okBtn">확인</button>
+      <button id="okBtn">${t("confirm")}</button>
     </div>
   `, () => {
     onClose();
@@ -156,8 +156,8 @@ export function showCustomPrompt(message, defaultValue, onSubmit, onCancel = () 
     <p>${message}</p>
     <input style="margin-top: 0px;" type="text" id="promptInput" value="${defaultValue || ""}">
     <div class="custom-modal-buttons" style="margin-top: 20px;">
-      <button id="submitBtn">확인</button>
-      <button id="cancelBtn">취소</button>
+      <button id="submitBtn">${t("confirm")}</button>
+      <button id="cancelBtn">${t("cancel")}</button>
     </div>
   `, () => {
     onCancel();
@@ -188,8 +188,7 @@ export function showCustomAlert(message, onClose = () => {}) {
   const modal = createModal(`
     <p>${message}</p>
     <div class="custom-modal-buttons">
-      <button id="paymentBtn">결제하러 가기</button>
-      <button id="okBtn">확인</button>
+      <button id="okBtn">${t("confirm")}</button>
     </div>
   `, () => {
     onClose();
@@ -197,20 +196,6 @@ export function showCustomAlert(message, onClose = () => {}) {
 
   modal.querySelector("#okBtn").addEventListener("click", () => {
     onClose();
-    modal.remove();
-  });
-
-   modal.querySelector("#paymentBtn").addEventListener("click", () => {
-    getUsertoken()
-      .then(token => {
-        console.log('(결제 페이지 이동):');
-        // 결제 페이지 이동
-        // redirectToPayment(token);
-      })
-      .catch(err => {
-        console.error('토큰을 가져오는 데 실패했습니다.', err);
-      });
-
     modal.remove();
   });
 }

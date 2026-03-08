@@ -18,3 +18,16 @@ export function openUrlListByCategory(category) {
 
   urlList.style.display = urlList.style.display === "block" ? "none" : "block";
 }
+
+export function showUrlListByCategory(category) {
+  const categoryHeader = document.querySelector(
+    `.category-header[data-category="${category}"]`
+  );
+
+  if (!categoryHeader) return;
+
+  const urlList = categoryHeader.nextElementSibling;
+  if (!urlList || !urlList.classList.contains("url-list")) return;
+
+  urlList.style.display = "block";
+}

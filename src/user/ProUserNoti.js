@@ -1,13 +1,14 @@
 import { showCustomAlert } from "../common/confirm.js";
 import { getSavedUrls, getActiveCategory } from "../useState.js";
+import { t } from "../i18n/i18n.js";
 
 // 카테고리 3개 제한 알림
 export function notifyCategoryLimitReached() {
   const savedUrls = getSavedUrls();
   if (Object.keys(savedUrls).length > 3) {
-    showCustomAlert(
-      "무료 버전에서는 최대 3개의 <br>카테고리만 추가할 수 있습니다."
-    );
+    showCustomAlert(t("categoryLimit"));
+    const newCategoryInput = document.getElementById("newCategoryInput");
+    const addCategoryBtn = document.getElementById("addCategoryBtn");
     newCategoryInput.style.display = "none";
     addCategoryBtn.style.display = "block";
     return true;
@@ -25,8 +26,8 @@ export function notifyUrlLimitReached(data, tabs) {
 
   if (savedUrls.length + tabsList.length > 7) {
     showChromeNotification(
-      "무료 버전에서는 최대 7개까지만 링크를 저장할 수 있습니다.",
-      "링크 저장 실패",
+      t("urlLimit"),
+      t("urlSaveFailed"),
       "src/public/warning.webp"
     );
     return true;
@@ -37,9 +38,7 @@ export function notifyUrlLimitReached(data, tabs) {
 // 전체 열기 제한 (프로 전용)
 export function notifyOpenAllLimit(category) {
   if (category !== "기본") {
-    showCustomAlert(
-      "무료 버전에서는 '전체 열기' 기능이 기본 카테고리로 제한됩니다."
-    );
+    showCustomAlert(t("openAllLimit"));
     return true;
   }
   return false;

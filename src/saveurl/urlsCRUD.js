@@ -4,7 +4,7 @@ import {
   getUserActive,
   setSavedUrls,
 } from "../useState.js";
-import { openUrlListByCategory } from "../common/afterEvent.js";
+import { openUrlListByCategory, showUrlListByCategory } from "../common/afterEvent.js";
 import { notifyUrlLimitReached } from "../user/ProUserNoti.js";
 
 // add urls
@@ -139,5 +139,6 @@ export function restoreUrlToButton(element) {
   setSavedUrls(newSavedUrls);
   chrome.storage.sync.set({ savedUrls: newSavedUrls }, () => {
     openUrlListByCategory("휴지통");
+    showUrlListByCategory(beforeCategory);
   });
 }

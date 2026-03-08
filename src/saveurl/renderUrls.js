@@ -5,6 +5,7 @@ import {
   updateUrlTitle,
 } from "./urlsCRUD.js";
 import { attachUrlDragAndDropHandlers } from "../common/dragDropToCategoryAndUrls.js";
+import { t } from "../i18n/i18n.js";
 
 export function renderUrls(category) {
   const urls = getSavedUrls()[category];
@@ -23,7 +24,7 @@ function createUrlList(category, urls, isTrash = false) {
 
   if (!Array.isArray(urls) || urls.length === 0) {
     const none = document.createElement("div");
-    none.textContent = isTrash ? "휴지통이 비었습니다." : "저장된 URL 없음";
+    none.textContent = isTrash ? t("trashEmpty") : t("noSavedUrls");
     none.style.fontSize = "12px";
     urlList.appendChild(none);
     return urlList;
@@ -64,7 +65,7 @@ function createUrlList(category, urls, isTrash = false) {
 
     if (isTrash) {
       const restoreBtn = document.createElement("button");
-      restoreBtn.textContent = "복구";
+      restoreBtn.textContent = t("restore");
       restoreBtn.className = "restoreBtn";
       restoreBtn.style.textAlign = "right";
       restoreBtn.addEventListener("click", () => restoreUrlToButton(item));
@@ -137,6 +138,7 @@ function enableInlineEdit(div, link, deleteBtn, categoryName, item) {
 
   function handleClickOutside(e) {
     if (!div.contains(e.target)) {
+      document.removeEventListener("click", handleClickOutside);
       toggleEditState(div, link, deleteBtn, false);
       input.remove();
     }
@@ -146,6 +148,7 @@ function enableInlineEdit(div, link, deleteBtn, categoryName, item) {
 
   input.addEventListener("keydown", (e) => {
     if (e.key === "Enter") {
+      document.removeEventListener("click", handleClickOutside);
       const newTitle = input.value.trim();
       if (newTitle !== "") {
         updateUrlTitle(categoryName, item, newTitle);
@@ -153,6 +156,7 @@ function enableInlineEdit(div, link, deleteBtn, categoryName, item) {
       toggleEditState(div, link, deleteBtn, false);
       input.remove();
     } else if (e.key === "Escape") {
+      document.removeEventListener("click", handleClickOutside);
       toggleEditState(div, link, deleteBtn, false);
       input.remove();
     }

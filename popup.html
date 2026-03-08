@@ -14,11 +14,11 @@
     />
   </head>
   <body>
-    <div id="loading" style="text-align: center; padding: 1em">로딩 중...</div>
+    <div id="loading" style="text-align: center; padding: 1em" data-i18n="loading">로딩 중...</div>
     <div id="main-content" style="display: none">
       <div>
         <div style="display: flex; justify-content: space-between">
-          <h3>📌 활성화 카테고리</h3>
+          <h3>📌 <span data-i18n="activeCategory">활성화 카테고리</span></h3>
           <div id="tool-tips"></div>
         </div>
         <div class="category-box">
@@ -44,8 +44,8 @@
                   text-align: center;
                 "
               >
-                <div style="font-size: 9px; color: gray">CtrlA+Q</div>
-                <div style="font-size: 11px; color: gray">현재 탭 저장</div>
+                <div id="shortcut-save-tab" style="font-size: 9px; color: gray"></div>
+                <div style="font-size: 11px; color: gray" data-i18n="saveCurrentTab">현재 탭 저장</div>
               </div>
               <div style="border-left: 1px solid #ccc; margin: 0px 6px"></div>
 
@@ -58,21 +58,21 @@
                   text-align: center;
                 "
               >
-                <div style="font-size: 9px; color: gray">Ctrl+Shift+Q</div>
-                <div style="font-size: 11px; color: gray">전체 탭 저장</div>
+                <div id="shortcut-save-tabs" style="font-size: 9px; color: gray"></div>
+                <div style="font-size: 11px; color: gray" data-i18n="saveAllTabs">전체 탭 저장</div>
               </div>
             </div>
           </div>
           <div id="categoryList" style="padding: 0px; margin-left: 10px"></div>
         </div>
       </div>
-      <h3>📌 카테고리 목록</h3>
+      <h3>📌 <span data-i18n="categoryList">카테고리 목록</span></h3>
       <div id="categoryContainer"></div>
       <div id="trashCategoryContainer"></div>
 
       <button id="addCategoryBtn">+</button>
       <div id="newCategoryInput" class="input-group">
-        <input type="text" id="newCategory" placeholder="새 카테고리 이름" />
+        <input type="text" id="newCategory" data-i18n-placeholder="newCategoryPlaceholder" placeholder="새 카테고리 이름" />
       </div>
     </div>
     <script type="module" src="popup.js"></script>

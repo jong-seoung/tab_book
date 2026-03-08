@@ -1,6 +1,8 @@
 import { styleButton } from "../common/common.js";
 import { deleteCategory, updateCategory } from "./categoryCRUD.js"
-import { showCustomConfirm, showCustomPrompt } from "../common/confirm.js";
+import { showCustomConfirm, showCustomPrompt, showCustomAlertOnly } from "../common/confirm.js";
+import { t } from "../i18n/i18n.js";
+import { getCategories } from "../useState.js";
 
 let openedSettingMenu = null;
 
@@ -48,14 +50,14 @@ export function createSettingMenu(category) {
 
   const renameItem = document.createElement("div");
   renameItem.className = "setting-item";
-  renameItem.textContent = "이름 변경";
+  renameItem.textContent = t("rename");
   renameItem.addEventListener("click", (e) => {
     e.preventDefault();
     e.stopPropagation();
     menu.style.display = "none";
 
     showCustomPrompt(
-      `"${category}"의 이름을 변경합니다.`,
+      t("renamePrompt", { category }),
       "",
       (newCatName) => {
         if (
@@ -73,21 +75,27 @@ export function createSettingMenu(category) {
 
   const deleteItem = document.createElement("div");
   deleteItem.className = "setting-item";
-  deleteItem.textContent = "삭제";
+  deleteItem.textContent = t("delete");
   deleteItem.style.color = "red";
   deleteItem.addEventListener("click", (e) => {
     e.preventDefault();
     e.stopPropagation();
     menu.style.display = "none";
 
+    const categories = getCategories().filter((c) => c !== "휴지통");
+    if (categories.length <= 1) {
+      showCustomAlertOnly(t("cannotDeleteLastCategory"));
+      return;
+    }
+
     showCustomPrompt(
-      `"${category}" 카테고리를 삭제하려면 이름을 정확히 입력하세요.`,
+      t("deleteCategoryPrompt", { category }),
       "",
       function handleInput(userInput) {
         if (userInput === category) {
           deleteCategory(category);
         } else {
-          showCustomConfirm("틀립니다. 다시 입력해주세요.", function () {
+          showCustomConfirm(t("deleteWrongInput"), function () {
             deleteItem.click();
           });
         }

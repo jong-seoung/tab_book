@@ -1,6 +1,6 @@
-// import { showCustomConfirm, showCustomAlertOnly } from "../common/confirm.js";
-// import { redirectToPayment, cancelPayment } from "./payment.js";
-// import { loadUserData } from "./loadUserData.js";
+import { t, applyI18nToDOM } from "../i18n/i18n.js";
+import { createLanguageDropdown } from "../i18n/LanguageToggle.js";
+import { loadData } from "../../loadData.js";
 
 export function renderTooltip() {
   const toolTipDiv = document.getElementById("tool-tips");
@@ -20,75 +20,127 @@ export function renderTooltip() {
   chrome.commands.getAll((commands) => {
     const lines = [];
     lines.push(
-      `<a class="a-decoration" href="https://jongseoung.tistory.com/380" target="_blank" style="color: #fff;">상세 가이드로 이동</a>`
+      `<a class="a-decoration" href="https://jongseoung.tistory.com/380" target="_blank" style="color: #fff;">${t("goToGuide")}</a>`
     );
-    // chrome.storage.sync.get(["userInfo"], (data) => {
-    //   const userInfo = data.userInfo;
 
-      // 구독 기능 구현 전
-      // const expireTime = new Date(userInfo.expireDate).getTime();
+    tooltip.innerHTML = "";
 
-      //   if (userInfo.isActive) {
-      //     lines.push(`
-      //   <button id="subscription-action-btn" style="...">
-      //     구독 만료일: ${userInfo.expireDate}</br>
-      //     구독 취소 하기
-      //   </button>
-      // `);
-      //   } else if (expireTime > Date.now()) {
-      //     // 구독 취소했지만 혜택이 남아 있는 상태
-      //     lines.push(`
-      //   <button class="a-decoration" id="subscription-action-btn" style="color: #fff; background: none; border: none; cursor: pointer; width: 100%;">
-      //     구독 만료일: ${userInfo.expireDate}</br>
-      //     혜택 종료까지 대기 중
-      //   </button>
-      // `);
-      //   } else {
-      //     // 완전히 구독이 끝난 상태
-      //     lines.push(`
-      //   <button class="a-decoration" id="subscription-action-btn" style="color: #fff; background: none; border: none; cursor: pointer; width: 100%;">
-      //     구독 페이지로 이동
-      //   </button>
-      // `);
-      //   }
+    // 가이드 링크 영역
+    const guideSection = document.createElement("div");
+    guideSection.style.padding = "6px 0";
+    guideSection.innerHTML = lines.join("");
 
-      tooltip.innerHTML = lines.join("");
+    const shortcutLink = document.createElement("a");
+    shortcutLink.textContent = t("goToShortcuts");
+    shortcutLink.href = "#";
+    shortcutLink.style.color = "#fff";
+    shortcutLink.style.display = "block";
+    shortcutLink.style.marginTop = "4px";
+    shortcutLink.className = "a-decoration";
+    shortcutLink.addEventListener("click", (e) => {
+      e.preventDefault();
+      chrome.tabs.create({ url: "chrome://extensions/shortcuts" });
+    });
+    guideSection.appendChild(shortcutLink);
 
-    //   const actionBtn = tooltip.querySelector("#subscription-action-btn");
-    //   if (!actionBtn) return;
+    // 구분선
+    const divider = document.createElement("div");
+    divider.style.borderTop = "1px solid rgba(255, 255, 255, 0.3)";
+    divider.style.margin = "0";
 
-    //   actionBtn.addEventListener("click", () => {
-    //     if (isActive && userInfo.expireDate) {
-    //       showCustomConfirm(
-    //         `구독을 취소합니다.</br>만료일까지 구독 기능은 활성화 됩니다.`,
-    //         (isConfirmed) => {
-    //           if (isConfirmed) {
-    //             loadUserData()
-    //               .then((token) => {
-    //                 cancelPayment(token);
-    //                 showCustomAlertOnly(
-    //                   "구독이 취소되었습니다.</br> 확장 프로그램을 다시 열어주세요."
-    //                 );
-    //               })
-    //               .catch((err) => {
-    //                 console.error("토큰을 가져오는 데 실패했습니다.", err);
-    //               });
-    //           } else {
-    //             console.log("취소되었습니다.");
-    //           }
-    //         }
-    //       );
-    //     } else {
-    //       loadUserData()
-    //         .then((token) => {
-    //           redirectToPayment(token);
-    //         })
-    //         .catch((err) => {
-    //           console.error("토큰을 가져오는 데 실패했습니다.", err);
-    //         });
-    //     }
-    //   });
-    // });
+    // Option 영역
+    const optionSection = document.createElement("div");
+    optionSection.style.padding = "6px 0 4px";
+
+    const optionLabel = document.createElement("div");
+    optionLabel.textContent = t("option");
+    optionLabel.style.fontSize = "11px";
+    optionLabel.style.color = "rgba(255, 255, 255, 0.7)";
+    optionLabel.style.marginBottom = "6px";
+
+    // Language 행
+    const langRow = document.createElement("div");
+    langRow.style.display = "flex";
+    langRow.style.alignItems = "center";
+    langRow.style.justifyContent = "space-between";
+    langRow.style.marginBottom = "6px";
+
+    const langLabel = document.createElement("div");
+    langLabel.textContent = "Language";
+    langLabel.style.fontSize = "11px";
+    langLabel.style.color = "rgba(255, 255, 255, 0.5)";
+
+    const langDropdown = createLanguageDropdown((newLocale) => {
+      applyI18nToDOM();
+      loadData();
+    });
+
+    langRow.append(langLabel, langDropdown);
+
+    // Quick Save 행
+    const quickSaveRow = document.createElement("div");
+    quickSaveRow.style.display = "flex";
+    quickSaveRow.style.alignItems = "center";
+    quickSaveRow.style.justifyContent = "space-between";
+
+    const quickSaveLabel = document.createElement("div");
+    quickSaveLabel.textContent = t("quickSave");
+    quickSaveLabel.style.fontSize = "11px";
+    quickSaveLabel.style.color = "rgba(255, 255, 255, 0.5)";
+
+    const toggleWrapper = document.createElement("label");
+    toggleWrapper.style.position = "relative";
+    toggleWrapper.style.display = "inline-block";
+    toggleWrapper.style.width = "32px";
+    toggleWrapper.style.height = "18px";
+    toggleWrapper.style.cursor = "pointer";
+
+    const quickSaveToggle = document.createElement("input");
+    quickSaveToggle.type = "checkbox";
+    quickSaveToggle.style.opacity = "0";
+    quickSaveToggle.style.width = "0";
+    quickSaveToggle.style.height = "0";
+
+    const slider = document.createElement("span");
+    slider.style.position = "absolute";
+    slider.style.inset = "0";
+    slider.style.backgroundColor = "#555";
+    slider.style.borderRadius = "18px";
+    slider.style.transition = "background-color 0.2s";
+
+    const knob = document.createElement("span");
+    knob.style.position = "absolute";
+    knob.style.height = "14px";
+    knob.style.width = "14px";
+    knob.style.left = "2px";
+    knob.style.bottom = "2px";
+    knob.style.backgroundColor = "#fff";
+    knob.style.borderRadius = "50%";
+    knob.style.transition = "transform 0.2s";
+
+    slider.appendChild(knob);
+    toggleWrapper.append(quickSaveToggle, slider);
+
+    function updateToggleVisual(checked) {
+      slider.style.backgroundColor = checked ? "#4CAF50" : "#555";
+      knob.style.transform = checked ? "translateX(14px)" : "translateX(0)";
+    }
+
+    chrome.storage.sync.get(["quickSave"], (result) => {
+      quickSaveToggle.checked = result.quickSave !== false;
+      updateToggleVisual(quickSaveToggle.checked);
+    });
+
+    quickSaveToggle.addEventListener("change", () => {
+      updateToggleVisual(quickSaveToggle.checked);
+      chrome.storage.sync.set({ quickSave: quickSaveToggle.checked });
+    });
+
+    quickSaveRow.append(quickSaveLabel, toggleWrapper);
+
+    optionSection.append(optionLabel, langRow, quickSaveRow);
+
+    tooltip.append(guideSection, divider, optionSection);
   });
 
   tooltip.style.visibility = "hidden";

@@ -2,6 +2,7 @@ import { getSavedUrls, setSavedUrls } from "../useState.js";
 import { renderUrls } from "../saveurl/renderUrls.js";
 import { styleButton } from "../common/common.js";
 import { showCustomConfirm } from "../common/confirm.js";
+import { t } from "../i18n/i18n.js";
 
 export function createTrashCategory() {
   const trashCategoryContainer = document.getElementById(
@@ -38,7 +39,7 @@ function createTrashCategoryHeader() {
   header.dataset.category = "휴지통";
 
   const title = document.createElement("span");
-  title.textContent = "휴지통";
+  title.textContent = t("trash");
 
   const buttonsDiv = document.createElement("div");
   buttonsDiv.className = "category-buttons";
@@ -52,14 +53,14 @@ function createTrashCategoryHeader() {
 
 function trashDeleteAllButton() {
   const btn = document.createElement("button");
-  btn.textContent = "비우기";
+  btn.textContent = t("emptyTrash");
   styleButton(btn, "gray");
 
   btn.addEventListener("click", (e) => {
     e.preventDefault();
     e.stopPropagation();
     showCustomConfirm(
-      "휴지통을 비웁니다.<br>복원이 불가능합니다.",
+      t("emptyTrashConfirm"),
       (confirmation) => {
         if (confirmation) {
           emptyTrash(); // 확인 클릭 시 휴지통 비우기

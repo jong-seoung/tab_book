@@ -8,9 +8,8 @@ const secrets = JSON.parse(fs.readFileSync("secrets.json", "utf-8"));
 let manifest = fs.readFileSync("manifest.template.json", "utf-8");
 
 manifest = manifest
-  .replace(/__CLIENT_ID__/g, secrets.CLIENT_ID)
   .replace(/__EXTENSION_KEY__/g, secrets.EXTENSION_KEY);
 
 fs.writeFileSync("manifest.json", manifest);
 
-console.log("manifest.json generated in dist/");
+console.log("manifest.json generated!");

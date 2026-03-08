@@ -5,6 +5,7 @@ import { createOpenAllButton } from "./openAllButton.js";
 import { createSettingButton } from "./settingButton.js";
 import { addCategory } from "./categoryCRUD.js";
 import { renderUrls } from "../saveurl/renderUrls.js";
+import { t, translateCategoryName } from "../i18n/i18n.js";
 
 // category render
 export function renderCategories() {
@@ -57,7 +58,7 @@ function createCategoryHeader(category) {
   header.dataset.category = category;
 
   const title = document.createElement("span");
-  title.textContent = category;
+  title.textContent = translateCategoryName(category);
 
   const buttonsDiv = document.createElement("div");
   buttonsDiv.className = "category-buttons";
@@ -89,7 +90,7 @@ export function createAddCategoryButton() {
   const newCategoryInputField = document.getElementById("newCategory");
 
   const confirmAddCategoryBtn = document.createElement("button");
-  confirmAddCategoryBtn.textContent = "추가";
+  confirmAddCategoryBtn.textContent = t("add");
   confirmAddCategoryBtn.id = "confirmAddCategoryBtn";
   confirmAddCategoryBtn.style.display = "none";
   newCategoryInput.appendChild(confirmAddCategoryBtn);

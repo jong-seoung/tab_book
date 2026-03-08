@@ -2,10 +2,11 @@ import { styleButton } from "../common/common.js";
 import { showCustomConfirm } from "../common/confirm.js";
 import { getSavedUrls, setSavedUrls } from "../useState.js";
 import { openUrlListByCategory } from "../common/afterEvent.js";
+import { t } from "../i18n/i18n.js";
 
 export function createDeleteAllButton(category) {
   const btn = document.createElement("button");
-  btn.textContent = "전체 삭제";
+  btn.textContent = t("deleteAll");
   styleButton(btn, "black");
 
   btn.addEventListener("click", (e) => {
@@ -13,7 +14,7 @@ export function createDeleteAllButton(category) {
     e.preventDefault();
 
     showCustomConfirm(
-      `"${category}" 카테고리의 </br> 모든 링크를 삭제합니다.`,
+      t("deleteAllConfirm", { category }),
       (isConfirmed) => {
         if (isConfirmed) {
           deleteAllUrls(category);

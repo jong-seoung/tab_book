@@ -1,5 +1,6 @@
 import { getCategories, getActiveCategory } from "../useState.js";
 import { changeActiveCategory } from "../category/categoryCRUD.js";
+import { translateCategoryName } from "../i18n/i18n.js";
 
 export function renderActiveCategory() {
   const currentCategoryDisplay = document.getElementById("currentCategory");
@@ -15,11 +16,11 @@ export function renderActiveCategory() {
 
     const categoryItem = document.createElement("div");
     categoryItem.className = "category-item";
-    categoryItem.textContent = category;
+    categoryItem.textContent = translateCategoryName(category);
 
     // 활성화 카테고리 디자인
     if (category === activeCategory) {
-      currentCategoryDisplay.textContent = activeCategory;
+      currentCategoryDisplay.textContent = translateCategoryName(activeCategory);
       categoryItem.style.fontWeight = "bold";
       categoryItem.style.color = "green";
       categoryItem.style.pointerEvents = "none";
