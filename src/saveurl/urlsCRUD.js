@@ -138,7 +138,7 @@ export function restoreUrlToButton(element) {
 
   setSavedUrls(newSavedUrls);
   chrome.storage.sync.set({ savedUrls: newSavedUrls }, () => {
-    openUrlListByCategory("휴지통");
+    showUrlListByCategory("휴지통");
     showUrlListByCategory(beforeCategory);
   });
 }
