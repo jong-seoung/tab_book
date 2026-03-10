@@ -1,18 +1,12 @@
 import {
   getActiveCategory,
   getSavedUrls,
-  getUserActive,
   setSavedUrls,
 } from "../useState.js";
 import { openUrlListByCategory, showUrlListByCategory } from "../common/afterEvent.js";
-import { notifyUrlLimitReached } from "../user/ProUserNoti.js";
 
 // add urls
 export function addUrlToActiveCategory(data, tabs, isBackground = false) {
-  if (!getUserActive() && notifyUrlLimitReached(data, tabs)) {
-    return;
-  }
-
   let activeCategory;
   let SavedUrls;
 
@@ -64,6 +58,21 @@ export function updateUrlTitle(category, element, newTitle) {
     ...savedUrls,
     [category]: categorySavedUrls,
   };
+  setSavedUrls(newSavedUrls);
+  chrome.storage.sync.set({ savedUrls: newSavedUrls }, () => {
+    openUrlListByCategory(category);
+  });
+}
+
+// update url title and url
+export function updateUrlItem(category, element, newTitle, newUrl) {
+  const savedUrls = getSavedUrls();
+  const categorySavedUrls = savedUrls[category];
+  const target = categorySavedUrls.find((item) => item === element);
+  target.title = newTitle;
+  target.url = newUrl;
+
+  const newSavedUrls = { ...savedUrls, [category]: categorySavedUrls };
   setSavedUrls(newSavedUrls);
   chrome.storage.sync.set({ savedUrls: newSavedUrls }, () => {
     openUrlListByCategory(category);

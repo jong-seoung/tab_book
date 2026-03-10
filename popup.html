@@ -15,6 +15,21 @@
   </head>
   <body>
     <div id="loading" style="text-align: center; padding: 1em" data-i18n="loading">로딩 중...</div>
+
+    <div id="category-picker" style="display: none; padding: 6px 0;">
+      <h3 id="picker-title" style="font-size: 15px; margin-bottom: 8px; text-align: center;"></h3>
+      <p id="picker-tooltip1" style="font-size: 12px; color: gray; margin-bottom: 12px; text-align: center;"></p>
+      <div id="picker-list" style="display: flex; flex-direction: column; gap: 6px;"></div>
+      <p id="picker-tooltip2" style="font-size: 10px; color: gray; margin-top: 12px; text-align: center;"></p>
+    </div>
+
+    <div id="open-all-picker" style="display: none; padding: 6px 0;">
+      <h3 id="open-all-title" style="font-size: 15px; margin-bottom: 8px; text-align: center;"></h3>
+      <p id="open-all-tooltip1" style="font-size: 12px; color: gray; margin-bottom: 12px; text-align: center;"></p>
+      <div id="open-all-list" style="display: flex; flex-direction: column; gap: 6px;"></div>
+      <p id="open-all-tooltip2" style="font-size: 10px; color: gray; margin-top: 12px; text-align: center;"></p>
+    </div>
+
     <div id="main-content" style="display: none">
       <div>
         <div style="display: flex; justify-content: space-between">

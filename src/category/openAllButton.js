@@ -1,6 +1,5 @@
 import { styleButton } from "../common/common.js";
-import { getUserActive, getSavedUrls } from "../useState.js";
-import { notifyOpenAllLimit } from "../user/ProUserNoti.js";
+import { getSavedUrls } from "../useState.js";
 import { t } from "../i18n/i18n.js";
 
 export function createOpenAllButton(category) {
@@ -11,10 +10,6 @@ export function createOpenAllButton(category) {
   btn.addEventListener("click", (e) => {
     e.stopPropagation();
     e.preventDefault();
-
-    if (!getUserActive() && notifyOpenAllLimit()) {
-      return;
-    }
 
     const urls = getSavedUrls()[category] || [];
 

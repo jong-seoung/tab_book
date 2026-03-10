@@ -73,6 +73,9 @@ export function renderTooltip() {
     const langDropdown = createLanguageDropdown((newLocale) => {
       applyI18nToDOM();
       loadData();
+      const toolTipDiv = document.getElementById("tool-tips");
+      toolTipDiv.innerHTML = "";
+      renderTooltip();
     });
 
     langRow.append(langLabel, langDropdown);
@@ -138,7 +141,79 @@ export function renderTooltip() {
 
     quickSaveRow.append(quickSaveLabel, toggleWrapper);
 
-    optionSection.append(optionLabel, langRow, quickSaveRow);
+    // Dark Mode 행
+    const darkModeRow = document.createElement("div");
+    darkModeRow.style.display = "flex";
+    darkModeRow.style.alignItems = "center";
+    darkModeRow.style.justifyContent = "space-between";
+    darkModeRow.style.marginTop = "6px";
+
+    const darkModeLabel = document.createElement("div");
+    darkModeLabel.textContent = t("darkMode");
+    darkModeLabel.style.fontSize = "11px";
+    darkModeLabel.style.color = "rgba(255, 255, 255, 0.5)";
+
+    const darkModeToggleWrapper = document.createElement("label");
+    darkModeToggleWrapper.style.position = "relative";
+    darkModeToggleWrapper.style.display = "inline-block";
+    darkModeToggleWrapper.style.width = "32px";
+    darkModeToggleWrapper.style.height = "18px";
+    darkModeToggleWrapper.style.cursor = "pointer";
+
+    const darkModeToggle = document.createElement("input");
+    darkModeToggle.type = "checkbox";
+    darkModeToggle.style.opacity = "0";
+    darkModeToggle.style.width = "0";
+    darkModeToggle.style.height = "0";
+
+    const darkModeSlider = document.createElement("span");
+    darkModeSlider.style.position = "absolute";
+    darkModeSlider.style.inset = "0";
+    darkModeSlider.style.backgroundColor = "#555";
+    darkModeSlider.style.borderRadius = "18px";
+    darkModeSlider.style.transition = "background-color 0.2s";
+
+    const darkModeKnob = document.createElement("span");
+    darkModeKnob.style.position = "absolute";
+    darkModeKnob.style.height = "14px";
+    darkModeKnob.style.width = "14px";
+    darkModeKnob.style.left = "2px";
+    darkModeKnob.style.bottom = "2px";
+    darkModeKnob.style.backgroundColor = "#fff";
+    darkModeKnob.style.borderRadius = "50%";
+    darkModeKnob.style.transition = "transform 0.2s";
+
+    darkModeSlider.appendChild(darkModeKnob);
+    darkModeToggleWrapper.append(darkModeToggle, darkModeSlider);
+
+    function updateDarkModeVisual(checked) {
+      darkModeSlider.style.backgroundColor = checked ? "#4CAF50" : "#555";
+      darkModeKnob.style.transform = checked ? "translateX(14px)" : "translateX(0)";
+    }
+
+    function applyDarkMode(enabled) {
+      if (enabled) {
+        document.body.classList.add("dark-mode");
+      } else {
+        document.body.classList.remove("dark-mode");
+      }
+    }
+
+    chrome.storage.sync.get(["darkMode"], (result) => {
+      darkModeToggle.checked = result.darkMode === true;
+      updateDarkModeVisual(darkModeToggle.checked);
+      applyDarkMode(darkModeToggle.checked);
+    });
+
+    darkModeToggle.addEventListener("change", () => {
+      updateDarkModeVisual(darkModeToggle.checked);
+      applyDarkMode(darkModeToggle.checked);
+      chrome.storage.sync.set({ darkMode: darkModeToggle.checked });
+    });
+
+    darkModeRow.append(darkModeLabel, darkModeToggleWrapper);
+
+    optionSection.append(optionLabel, langRow, quickSaveRow, darkModeRow);
 
     tooltip.append(guideSection, divider, optionSection);
   });

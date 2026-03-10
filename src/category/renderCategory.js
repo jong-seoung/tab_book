@@ -13,6 +13,16 @@ export function renderCategories() {
   const savedUrls = getSavedUrls();
 
   const categoryContainer = document.getElementById("categoryContainer");
+
+  // 현재 열린 카테고리 상태 저장
+  const openCategories = new Set();
+  categoryContainer.querySelectorAll(".category-header[data-category]").forEach((header) => {
+    const urlList = header.nextElementSibling;
+    if (urlList?.style.display === "block") {
+      openCategories.add(header.dataset.category);
+    }
+  });
+
   categoryContainer.innerHTML = "";
 
   categories
@@ -20,7 +30,8 @@ export function renderCategories() {
     .forEach((category) => {
       const categoryWrapper = createCategoryWrapper(
         category,
-        savedUrls[category] || []
+        savedUrls[category] || [],
+        openCategories.has(category)
       );
       categoryContainer.appendChild(categoryWrapper);
     });
@@ -32,15 +43,16 @@ export function renderCategories() {
   categoryContainer.appendChild(dummyWrapper);
 }
 
-function createCategoryWrapper(category) {
+function createCategoryWrapper(category, urls, isOpen = false) {
   const wrapper = document.createElement("div");
   wrapper.className = "category-wrapper";
 
-  const header = createCategoryHeader(category);
+  const header = createCategoryHeader(category, urls);
   wrapper.append(header);
 
   // URL 리스트 생성
   const urlList = renderUrls(category);
+  if (isOpen) urlList.style.display = "block";
 
   header.addEventListener("click", () => {
     urlList.style.display =
@@ -51,14 +63,14 @@ function createCategoryWrapper(category) {
   return wrapper;
 }
 
-function createCategoryHeader(category) {
+function createCategoryHeader(category, urls = []) {
   const header = document.createElement("div");
   header.className = "category-header";
   header.draggable = true;
   header.dataset.category = category;
 
   const title = document.createElement("span");
-  title.textContent = translateCategoryName(category);
+  title.textContent = `${translateCategoryName(category)} / ${urls.length}`;
 
   const buttonsDiv = document.createElement("div");
   buttonsDiv.className = "category-buttons";
@@ -70,6 +82,9 @@ function createCategoryHeader(category) {
   const settingBtn = createSettingButton(category);
 
   const categoryDiv = document.createElement("div");
+  categoryDiv.style.display = "flex";
+  categoryDiv.style.alignItems = "center";
+  categoryDiv.style.gap = "4px";
   categoryDiv.append(title, settingBtn);
 
   const allBtnDiv = document.createElement("div");

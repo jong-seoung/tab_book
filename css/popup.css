@@ -62,17 +62,33 @@ body{
 }
 
 .url-item p {
-  display: inline-block;
-  max-width: 70%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-  margin: 0px;
+  margin: 0;
+  min-width: 0;
+  line-height: 14px;
 }
 
 .deleteBtn {
   margin-right: 7px;
   background-color: transparent;
+}
+
+.url-favicon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+  border-radius: 2px;
+}
+
+
+.editBtn {
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 2px 3px;
+  color: gray;
 }
 
 .url-list {
@@ -265,4 +281,88 @@ body{
 
 .a-decoration:hover {
   text-decoration: underline;
+}
+
+/* 다크 모드 */
+body.dark-mode {
+  background-color: #1e1e1e;
+  color: #e0e0e0;
+}
+
+body.dark-mode .category-box {
+  background-color: #2a2a2a;
+  border-color: #444;
+}
+
+body.dark-mode .category-header {
+  border-bottom-color: #444;
+}
+
+body.dark-mode .trash-header {
+  border-bottom-color: #444;
+}
+
+body.dark-mode .setting-menu {
+  background: #2a2a2a;
+  border-color: #555;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+body.dark-mode .setting-item {
+  color: #e0e0e0;
+}
+
+body.dark-mode .url-item a {
+  color: #aaa;
+}
+
+body.dark-mode .url-item button {
+  background-color: #2a2a2a;
+  color: #aaa;
+}
+
+body.dark-mode #addCategoryBtn {
+  background-color: #1e1e1e;
+  color: #aaa;
+  border-color: #1e1e1e;
+}
+
+body.dark-mode #confirmAddCategoryBtn {
+  background-color: #4a5a6a;
+}
+
+body.dark-mode #confirmAddCategoryBtn:hover {
+  background-color: #3a4a5a;
+}
+
+body.dark-mode #newCategory {
+  background-color: #2a2a2a;
+  color: #e0e0e0;
+  border-color: #555;
+}
+
+body.dark-mode #save-tab:hover div,
+body.dark-mode #save-tabs:hover div {
+  color: #e0e0e0 !important;
+}
+
+body.dark-mode .url-list-empty {
+  color: #666;
+}
+
+
+body.dark-mode #category-picker p,
+body.dark-mode #open-all-picker p {
+  color: #888 !important;
+}
+
+body.dark-mode #picker-list button,
+body.dark-mode #open-all-list button {
+  border-color: #444 !important;
+  color: #e0e0e0 !important;
+}
+
+body.dark-mode #picker-list button:hover,
+body.dark-mode #open-all-list button:hover {
+  background-color: rgba(255, 255, 255, 0.08) !important;
 }

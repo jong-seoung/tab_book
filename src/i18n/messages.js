@@ -40,18 +40,25 @@ export const messages = {
     savedToCategory: "{category}카테고리에 저장되었습니다.",
     savedTabsToCategory: "{count}개의 탭이 {category}에 저장되었습니다.",
 
-    // Pro 제한 알림
-    categoryLimit:
-      "무료 버전에서는 최대 3개의 <br>카테고리만 추가할 수 있습니다.",
-    urlLimit: "무료 버전에서는 최대 7개까지만 링크를 저장할 수 있습니다.",
-    urlSaveFailed: "링크 저장 실패",
-    openAllLimit:
-      "무료 버전에서는 '전체 열기' 기능이 기본 카테고리로 제한됩니다.",
 
     // 툴팁
     goToGuide: "상세 가이드로 이동",
     goToShortcuts: "단축키 변경",
     option: "옵션",
+
+    // URL 편집
+    editTitle: "이름",
+    editUrl: "URL",
+
+    // Dark Mode
+    darkMode: "다크 모드",
+
+    // Open All (단축키)
+    openAllShortcut: "전체 열기",
+    openAllTooltip_1: "열 카테고리를 선택하세요.",
+    openAllTooltip_2: "선택한 카테고리의 모든 링크가 열립니다.",
+    openAllComplete: "링크 열기 완료",
+    openedTabsCount: "{count}개의 링크를 열었습니다.",
 
     // Quick Save
     quickSave: "빠른 저장",
@@ -105,17 +112,25 @@ export const messages = {
     savedToCategory: "Saved to {category} category.",
     savedTabsToCategory: "{count} tabs saved to {category}.",
 
-    // Pro 제한 알림
-    categoryLimit: "Free version allows up to <br>3 categories.",
-    urlLimit: "Free version allows up to 7 links.",
-    urlSaveFailed: "Save Failed",
-    openAllLimit:
-      "In the free version, 'Open All' is limited to the default category.",
 
     // 툴팁
     goToGuide: "Go to detailed guide",
     goToShortcuts: "Change shortcuts",
     option: "Option",
+
+    // URL 편집
+    editTitle: "Name",
+    editUrl: "URL",
+
+    // Dark Mode
+    darkMode: "Dark Mode",
+
+    // Open All (단축키)
+    openAllShortcut: "Open All",
+    openAllTooltip_1: "Select a category to open.",
+    openAllTooltip_2: "All links in the selected category will be opened.",
+    openAllComplete: "Links Opened",
+    openedTabsCount: "Opened {count} links.",
 
     // Quick Save
     quickSave: "Quick Save",

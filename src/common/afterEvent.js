@@ -16,7 +16,7 @@ export function openUrlListByCategory(category) {
     return;
   }
 
-  urlList.style.display = urlList.style.display === "block" ? "none" : "block";
+  urlList.style.display = "block";
 }
 
 export function showUrlListByCategory(category) {

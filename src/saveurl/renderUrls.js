@@ -2,9 +2,10 @@ import { getSavedUrls } from "../useState.js";
 import {
   deleteUrlToButtonX,
   restoreUrlToButton,
-  updateUrlTitle,
+  updateUrlItem,
 } from "./urlsCRUD.js";
 import { attachUrlDragAndDropHandlers } from "../common/dragDropToCategoryAndUrls.js";
+import { showUrlEditModal } from "../common/confirm.js";
 import { t } from "../i18n/i18n.js";
 
 export function renderUrls(category) {
@@ -38,6 +39,18 @@ function createUrlList(category, urls, isTrash = false) {
     div.dataset.url = item.url;
     div.dataset.index = index;
 
+    const favicon = document.createElement("img");
+    favicon.className = "url-favicon";
+    try {
+      const domain = new URL(item.url).hostname;
+      favicon.src = `https://www.google.com/s2/favicons?domain=${domain}&sz=16`;
+    } catch {
+      favicon.src = chrome.runtime.getURL("icons/default_favicon.png");
+    }
+    favicon.onerror = () => {
+      favicon.src = chrome.runtime.getURL("icons/default_favicon.png");
+    };
+
     const link = document.createElement(isTrash ? "a" : "p");
     if (isTrash) {
       link.href = item.url;
@@ -61,9 +74,9 @@ function createUrlList(category, urls, isTrash = false) {
       deleteUrlToButtonX(category, item)
     );
 
-    ulrListEvent(div, link, deleteBtn, category, item);
-
     if (isTrash) {
+      link.addEventListener("click", () => chrome.tabs.create({ url: item.url }));
+
       const restoreBtn = document.createElement("button");
       restoreBtn.textContent = t("restore");
       restoreBtn.className = "restoreBtn";
@@ -74,10 +87,29 @@ function createUrlList(category, urls, isTrash = false) {
       btnDiv.style.justifyContent = "center";
       btnDiv.append(restoreBtn, deleteBtn);
       div.style.justifyContent = "space-between";
-      div.append(link, btnDiv);
+      const linkWrapper = document.createElement("div");
+      linkWrapper.style.cssText = "display:flex;align-items:center;gap:5px;flex:1;min-width:0;overflow:hidden;";
+      linkWrapper.append(favicon, link);
+      div.append(linkWrapper, btnDiv);
     } else {
-      div.appendChild(link);
-      div.appendChild(deleteBtn);
+      const editBtn = document.createElement("button");
+      editBtn.className = "editBtn";
+      editBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:13px;vertical-align:middle;">edit</span>';
+      editBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        showUrlEditModal(item, (newTitle, newUrl) => {
+          updateUrlItem(category, item, newTitle, newUrl);
+        });
+      });
+
+      link.addEventListener("click", () => chrome.tabs.create({ url: item.url }));
+
+      const btnDiv = document.createElement("div");
+      btnDiv.append(editBtn, deleteBtn);
+      const linkWrapper = document.createElement("div");
+      linkWrapper.style.cssText = "display:flex;align-items:center;gap:5px;flex:1;min-width:0;overflow:hidden;";
+      linkWrapper.append(favicon, link);
+      div.append(linkWrapper, btnDiv);
     }
 
     urlList.appendChild(div);
@@ -99,73 +131,3 @@ function createUrlList(category, urls, isTrash = false) {
   return urlList;
 }
 
-function ulrListEvent(div, link, deleteBtn, category, item) {
-  let clickTimer = null;
-
-  link.addEventListener("click", () => {
-    if (clickTimer) return;
-
-    clickTimer = setTimeout(() => {
-      chrome.tabs.create({ url: item.url });
-      clickTimer = null;
-    }, 300);
-  });
-
-  link.addEventListener("dblclick", () => {
-    if (clickTimer) {
-      clearTimeout(clickTimer);
-      clickTimer = null;
-    }
-    enableInlineEdit(div, link, deleteBtn, category, item);
-  });
-}
-
-// 더블 클릭시 input 생성
-function enableInlineEdit(div, link, deleteBtn, categoryName, item) {
-  const currentTitle = link.textContent;
-
-  const input = document.createElement("input");
-  input.type = "text";
-  input.value = currentTitle;
-  input.style.maxWidth = "70%";
-
-  toggleEditState(div, link, deleteBtn, true);
-
-  div.appendChild(input);
-  input.focus();
-
-  div.dataset.isEditing = "true";
-
-  function handleClickOutside(e) {
-    if (!div.contains(e.target)) {
-      document.removeEventListener("click", handleClickOutside);
-      toggleEditState(div, link, deleteBtn, false);
-      input.remove();
-    }
-  }
-
-  document.addEventListener("click", handleClickOutside);
-
-  input.addEventListener("keydown", (e) => {
-    if (e.key === "Enter") {
-      document.removeEventListener("click", handleClickOutside);
-      const newTitle = input.value.trim();
-      if (newTitle !== "") {
-        updateUrlTitle(categoryName, item, newTitle);
-      }
-      toggleEditState(div, link, deleteBtn, false);
-      input.remove();
-    } else if (e.key === "Escape") {
-      document.removeEventListener("click", handleClickOutside);
-      toggleEditState(div, link, deleteBtn, false);
-      input.remove();
-    }
-  });
-}
-
-function toggleEditState(div, link, deleteBtn, isEditing) {
-  div.draggable = isEditing ? false : true;
-  link.style.display = isEditing ? "none" : "inline-block";
-  deleteBtn.style.display = isEditing ? "none" : "inline-block";
-  div.dataset.isEditing = isEditing ? "true" : "false";
-}

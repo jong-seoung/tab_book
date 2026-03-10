@@ -9,13 +9,17 @@ export function createTrashCategory() {
     "trashCategoryContainer"
   );
 
+  // 현재 열린 상태 저장
+  const trashHeader = trashCategoryContainer.querySelector(".category-header[data-category='휴지통']");
+  const isOpen = trashHeader?.nextElementSibling?.style.display === "block";
+
   trashCategoryContainer.innerHTML = "";
 
-  const trashWrapper = createTrashWrapper();
+  const trashWrapper = createTrashWrapper(isOpen);
   trashCategoryContainer.appendChild(trashWrapper);
 }
 
-function createTrashWrapper() {
+function createTrashWrapper(isOpen = false) {
   const wrapper = document.createElement("div");
   wrapper.className = "trashCategory-wrapper";
   wrapper.style.marginLeft = "10px";
@@ -23,6 +27,7 @@ function createTrashWrapper() {
 
   const header = createTrashCategoryHeader();
   const urlList = renderUrls("휴지통");
+  if (isOpen) urlList.style.display = "block";
 
   header.addEventListener("click", () => {
     urlList.style.display =

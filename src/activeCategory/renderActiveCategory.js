@@ -6,6 +6,9 @@ export function renderActiveCategory() {
   const currentCategoryDisplay = document.getElementById("currentCategory");
   const categoryList = document.getElementById("categoryList");
 
+  // 드롭다운 열린 상태 저장
+  const isOpen = categoryList.style.display === "block";
+
   categoryList.innerHTML = "";
 
   const categories = getCategories();
@@ -34,6 +37,8 @@ export function renderActiveCategory() {
 
     categoryList.appendChild(categoryItem);
   });
+
+  if (isOpen) categoryList.style.display = "block";
 }
 
 export function initCategoryDropdownEvent() {
