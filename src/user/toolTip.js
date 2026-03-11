@@ -130,7 +130,7 @@ export function renderTooltip() {
     }
 
     chrome.storage.sync.get(["quickSave"], (result) => {
-      quickSaveToggle.checked = result.quickSave !== false;
+      quickSaveToggle.checked = result.quickSave === true;
       updateToggleVisual(quickSaveToggle.checked);
     });
 

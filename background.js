@@ -15,11 +15,11 @@ chrome.commands.onCommand.addListener((command) => {
     });
   } else if (command === "save-current-tab" || command === "save-all-tabs") {
     chrome.storage.sync.get(["savedUrls", "activeCategory", "quickSave"], (data) => {
-      const quickSave = data.quickSave !== false; // 기본값 true
+      const quickSave = data.quickSave === true; // 기본값 false
 
       const queryOptions = command === "save-current-tab"
-        ? { active: true, currentWindow: true }
-        : { currentWindow: true };
+        ? { active: true, lastFocusedWindow: true, windowType: "normal" }
+        : { lastFocusedWindow: true, windowType: "normal" };
 
       chrome.tabs.query(queryOptions, (tabs) => {
         if (quickSave) {
@@ -39,15 +39,7 @@ chrome.commands.onCommand.addListener((command) => {
           // Quick Save OFF: 탭 정보를 임시 저장 후 확장프로그램 팝업 열기
           const pendingTabs = tabs.map((tab) => ({ title: tab.title, url: tab.url }));
           chrome.storage.local.set({ pendingTabs }, () => {
-            chrome.action.openPopup().catch(() => {
-              // openPopup 실패 시 별도 창으로 fallback
-              chrome.windows.create({
-                url: `src/categoryPicker/categoryPicker.html?command=${command}`,
-                type: "popup",
-                width: 320,
-                height: 400,
-              });
-            });
+            chrome.action.openPopup().catch(() => {});
           });
         }
       });

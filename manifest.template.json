@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Tab Book",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "작업 중인 탭들을 단축키 하나로 저장하고 쉽게 불러올 수 있는 가벼운 탭 관리 확장 프로그램",
   "permissions": [ "notifications", "tabs", "storage", "activeTab" ],
   "key": "__EXTENSION_KEY__",

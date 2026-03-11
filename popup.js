@@ -49,7 +49,13 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 });
 
-function renderCategoryPicker(pendingTabs) {
+function showMainContent() {
+  document.getElementById("category-picker").style.display = "none";
+  document.getElementById("open-all-picker").style.display = "none";
+  document.getElementById("main-content").style.display = "block";
+}
+
+function renderCategoryPicker(pendingTabs, keepOpen = false) {
   document.getElementById("picker-title").textContent = t("selectCategory");
   document.getElementById("picker-tooltip1").textContent = t("quickSaveTooltip_1");
   document.getElementById("picker-tooltip2").textContent = t("quickSaveTooltip_2");
@@ -64,13 +70,13 @@ function renderCategoryPicker(pendingTabs) {
       btn.style.cssText = "width:100%;padding:10px 14px;border-radius:8px;border:1px solid #ccc;background:transparent;font-size:14px;cursor:pointer;text-align:left;transition:background 0.15s;";
       btn.addEventListener("mouseenter", () => btn.style.backgroundColor = "rgba(0,0,0,0.06)");
       btn.addEventListener("mouseleave", () => btn.style.backgroundColor = "transparent");
-      btn.addEventListener("click", () => savePendingToCategory(category, pendingTabs));
+      btn.addEventListener("click", () => savePendingToCategory(category, pendingTabs, keepOpen));
       container.appendChild(btn);
     });
   });
 }
 
-function savePendingToCategory(category, pendingTabs) {
+function savePendingToCategory(category, pendingTabs, keepOpen = false) {
   chrome.storage.sync.get(["savedUrls"], (syncData) => {
     const savedUrls = syncData.savedUrls || {};
     const categoryUrls = savedUrls[category] || [];
@@ -91,12 +97,17 @@ function savePendingToCategory(category, pendingTabs) {
         title: t("saveComplete"),
         message,
       });
-      window.close();
+      if (keepOpen) {
+        showMainContent();
+        loadData();
+      } else {
+        window.close();
+      }
     });
   });
 }
 
-function renderOpenAllPicker() {
+function renderOpenAllPicker(keepOpen = false) {
   document.getElementById("open-all-title").textContent = t("openAllShortcut");
   document.getElementById("open-all-tooltip1").textContent = t("openAllTooltip_1");
   document.getElementById("open-all-tooltip2").textContent = t("openAllTooltip_2");
@@ -117,7 +128,8 @@ function renderOpenAllPicker() {
       btn.addEventListener("mouseleave", () => btn.style.backgroundColor = "transparent");
       btn.addEventListener("click", () => {
         chrome.runtime.sendMessage({ type: "OPEN_URLS", urls });
-        window.close();
+        if (keepOpen) showMainContent();
+        else window.close();
       });
       container.appendChild(btn);
     });
@@ -144,5 +156,39 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
       } catch (error) {
         console.error("Error updating DOM:", error);
       }
+  }
+});
+
+// 팝업이 열린 상태에서 단축키로 저장/전체열기 요청이 들어올 때 감지
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area !== "local") return;
+
+  if (changes.pendingTabs?.newValue?.length > 0) {
+    const pendingTabs = changes.pendingTabs.newValue;
+    chrome.storage.local.remove("pendingTabs");
+
+    const content = document.getElementById("main-content");
+    const picker = document.getElementById("category-picker");
+    const openAllPicker = document.getElementById("open-all-picker");
+
+    content.style.display = "none";
+    openAllPicker.style.display = "none";
+    picker.style.display = "block";
+    document.getElementById("picker-list").innerHTML = "";
+    renderCategoryPicker(pendingTabs, true);
+  }
+
+  if (changes.pendingOpenAll?.newValue === true) {
+    chrome.storage.local.remove("pendingOpenAll");
+
+    const content = document.getElementById("main-content");
+    const picker = document.getElementById("category-picker");
+    const openAllPicker = document.getElementById("open-all-picker");
+
+    content.style.display = "none";
+    picker.style.display = "none";
+    openAllPicker.style.display = "block";
+    document.getElementById("open-all-list").innerHTML = "";
+    renderOpenAllPicker(true);
   }
 });

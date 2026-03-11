@@ -42,9 +42,9 @@ export function renderActiveCategory() {
 }
 
 export function initCategoryDropdownEvent() {
-  const dropdown = document.getElementById("activeCategory");
-  // 드롭다운 이벤트
-  dropdown.addEventListener("click", () => {
+  const header = document.getElementById("category-box-header");
+  const categoryList = document.getElementById("categoryList");
+  header.addEventListener("click", () => {
     categoryList.style.display =
       categoryList.style.display === "block" ? "none" : "block";
   });
